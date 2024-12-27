@@ -1,9 +1,12 @@
-const expressAsyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 const Message = require("../models/messageModel");
 const User = require("../models/userModel");
 const Chat = require("../models/chatModel");
 
-const sendMessage = expressAsyncHandler(async(req, res) => {
+//@description     Create New Message
+//@route           POST /api/Message/
+//@access          Protected
+const sendMessage = asyncHandler(async(req, res) => {
     const { content , chatId } = req.body;
 
     if (!content || !chatId) {
@@ -12,7 +15,7 @@ const sendMessage = expressAsyncHandler(async(req, res) => {
     }
 
     var newMessage = {
-        sender: User._id,
+        sender: req.user._id,
         content: content,
         chat: chatId,
     };
@@ -28,7 +31,7 @@ const sendMessage = expressAsyncHandler(async(req, res) => {
         });
 
         await Chat.findByIdAndUpdate(req.body.chatId, {
-            latestMessage: message,
+            latestMessage: message
         });
 
         res.json(message);
@@ -38,7 +41,10 @@ const sendMessage = expressAsyncHandler(async(req, res) => {
     }
 });
 
-const allMessages = expressAsyncHandler(async(req, res) => {
+//@description     Get all Messages
+//@route           GET /api/Message/:chatId
+//@access          Protected
+const allMessages = asyncHandler(async(req, res) => {
     try {
         const messages = await Message.find({ chat: req.params.chatId }).populate("sender", "name pic email").populate("chat");
 
