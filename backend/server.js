@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-    origin: ['https://js6969.github.io']
+    origin: ['https://js6969.github.io/chatapp']
 }))
 
 app.get("/", (req, res) => {
