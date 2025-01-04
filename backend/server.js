@@ -7,12 +7,17 @@ const chatRoutes = require("./routes/chatRoutes");
 const messsageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const path = require("path");
+const cors = require('cors');
 
 dotenv.config();
 connectDB();
 const app = express();
 
 app.use(express.json());
+
+app.use(cors({
+    origin: ['https://js6969.github.io']
+}))
 
 app.get("/", (req, res) => {
   res.send("API running");
