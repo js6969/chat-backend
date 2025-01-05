@@ -58,7 +58,7 @@ const authUser = asyncHandler(async (req, res) => {
         });
     } else {
         res.status(401);
-        throw new Error("Invlalid Email or Password");
+        throw new Error("Invalid Email or Password");
     }
 
 });
@@ -76,7 +76,10 @@ const allUsers = asyncHandler(async (req, res) => {
     }
     : {};
 
-    const users = await User.find(keyword).find({ _id: {$ne: req.user._id }});
+    // const users = await User.find(keyword).find({ _id: {$ne: req.user._id }});
+    
+    const users = await User.find({ ...keyword, _id: { $ne: req.user._id } });
+    
     res.send(users);
 });
 

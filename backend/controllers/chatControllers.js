@@ -85,7 +85,7 @@ const createGroupChat = asyncHandler( async (req, res) => {
     var users  = JSON.parse(req.body.users);
 
     if (users.length < 2) {
-        return res.status(400).send({message: "More than two users required to form a group chat"});
+        return res.status(400).send("More than two users required to form a group chat");
     }
 
     users.push(req.user);
@@ -153,7 +153,7 @@ const addToGroup = asyncHandler( async (req, res) => {
 
     if (!added) {
         res.status(404);
-        throw new Error(error.message);
+        throw new Error("Chat not found");
     } else {
         res.json(added);
     }
@@ -178,7 +178,7 @@ const removeFromGroup = asyncHandler( async (req, res) => {
 
     if (!removed) {
         res.status(404);
-        throw new Error(error.message);
+        throw new Error("Chat not found");
     } else {
         res.json(removed);
     }

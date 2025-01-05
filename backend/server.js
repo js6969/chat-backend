@@ -4,62 +4,55 @@ const connectDB = require("./config/db");
 const colors = require("colors");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
-const messsageRoutes = require("./routes/messageRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const path = require("path");
-const cors = require('cors');
+// const cors = require('cors');
 
 dotenv.config();
 connectDB();
 const app = express();
 
-app.use(express.json());
+app.use(express.json()); // to accept json data
 
-app.use(cors({
-    origin: ['https://js6969.github.io']
-}))
+// app.use(cors({
+//     origin: ['https://js6969.github.io']
+// }))
 
 app.get("/", (req, res) => {
   res.send("API running");
 });
 
-app.get("/api/test", (req, res) => {
-  res.send("API");
-});
+// app.get("/api/test", (req, res) => {
+//   res.send("API");
+// });
 
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
-app.use("/api/message", messsageRoutes);
+app.use("/api/message", messageRoutes);
 
-// Error Handling middlewares
-app.use(notFound);
-app.use(errorHandler);
 
 //----------------------Deployment---------------------
 
 // const __dirname1 = path.resolve();
 
-// if (process.env.NODE_ENV == 'production') {
-//     // console.log("Serving frontend static files...");
-//     const buildPath = path.join(__dirname1, "frontend", "build");
-//     console.log("Frontend build path:", buildPath);
-//     app.use(express.static(buildPath));
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname1, "/frontend/build")));
 
-//     // app.use(express.static());
-//     // console.log("Serving frontend static files...");
-
-//     app.get('*', (req, res) => {
-//         // console.log("Sending index.html");
-//         res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"));
-//     });
+//   app.get("*", (req, res) =>
+//     res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
+//   );
 // } else {
-//     app.get('/', (req, res) => {
-//         res.send("API is running");
-//         // console.log("Serving frontend files...");
-//     });
+//   app.get("/", (req, res) => {
+//     res.send("API is running..");
+//   });
 // }
 
 //----------------------Deployment---------------------
+
+// Error Handling middlewares
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 
@@ -102,4 +95,9 @@ io.on("connection", (socket) => {
       socket.in(user._id).emit("message received", newMessageReceived);
     });
   });
+
+  // socket.off("setup", () => {
+  //   console.log("USER DISCONNECTED");
+  //   socket.leave(userData._id);
+  // });
 });
