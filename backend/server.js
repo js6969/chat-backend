@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json()); // to accept json data
 
 // app.use(cors({
-//     origin: ['https://js6969.github.io']
+//     origin: ['http://localhost:3000']
 // }))
 
 app.get("/", (req, res) => {
@@ -30,7 +30,6 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
-
 
 //----------------------Deployment---------------------
 
@@ -54,10 +53,10 @@ app.use("/api/message", messageRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 const server = app.listen(
-  PORT,
+  5000,
   console.log(`Server started successfully on PORT ${PORT}`.yellow.bold)
 );
 
@@ -96,8 +95,8 @@ io.on("connection", (socket) => {
     });
   });
 
-  // socket.off("setup", () => {
-  //   console.log("USER DISCONNECTED");
-  //   socket.leave(userData._id);
-  // });
+  socket.off("setup", () => {
+    console.log("USER DISCONNECTED");
+    socket.leave(userData._id);
+  });
 });
